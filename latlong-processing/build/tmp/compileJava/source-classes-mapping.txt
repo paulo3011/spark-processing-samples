@@ -1,0 +1,6 @@
+pmoreira/pipeline/batch.java
+ pmoreira.pipeline.batch
+pmoreira/pipeline/MapCsvToPosition.java
+ pmoreira.pipeline.MapCsvToPosition
+pmoreira/pipeline/Position.java
+ pmoreira.pipeline.Position
