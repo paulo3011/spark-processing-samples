@@ -42,7 +42,7 @@ import org.apache.spark.SparkConf;
 
 ## Gradlew
 
-- https://projectlombok.org/features/GetterSetter
+- https://docs.gradle.org/current/userguide/java_library_plugin.html
 
 ## Java
 
@@ -54,8 +54,10 @@ import org.apache.spark.SparkConf;
 
 - https://medium.com/collabcode/projeto-lombok-escrevendo-menos-c%C3%B3digo-em-java-8fc87b379209
 - https://stackoverflow.com/questions/24006937/lombok-annotations-do-not-compile-under-intellij-idea/37840148
+- https://projectlombok.org/features/GetterSetter
 
 ## Others
 
 - https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Date/getDate
 - https://www.w3.org/TR/NOTE-datetime
+- https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html

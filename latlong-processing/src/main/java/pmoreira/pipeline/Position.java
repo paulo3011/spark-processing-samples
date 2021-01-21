@@ -4,10 +4,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @NoArgsConstructor
-public class Position {
+public class Position
+        implements Serializable
+{
     /**
      * Set or get Vehicle plate
      */

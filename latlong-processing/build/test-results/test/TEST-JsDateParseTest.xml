@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="JsDateParseTest" tests="1" skipped="1" failures="0" errors="0" timestamp="2021-01-21T22:04:20" hostname="DESKTOP-JDUVMBB" time="0.971">
+  <properties/>
+  <testcase name="TestParseCols" classname="JsDateParseTest" time="0.971">
+    <skipped/>
+  </testcase>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

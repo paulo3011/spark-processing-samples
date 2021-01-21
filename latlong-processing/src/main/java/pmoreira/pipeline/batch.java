@@ -1,15 +1,18 @@
 package pmoreira.pipeline;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.SparkConf;
 import org.apache.spark.sql.SparkSession;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class batch {
     public static void main(String[] args) throws ParseException {
@@ -33,9 +36,10 @@ public class batch {
         JavaRDD<Position> positionsRDD = positionFileLines.mapPartitions(new MapCsvToPosition());
 
         positionsRDD.collect().forEach(position -> {
-            //position.getPlate();
-            System.out.println("");
+            System.out.println("plate:" + position.getPlate());
         });
 
     }
+
+
 }

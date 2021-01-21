@@ -1,6 +1,6 @@
 plugins {
     //id 'io.franzbecker.gradle-lombok' version '1.11'
-    id 'java'
+    id 'java-library'
 }
 
 group 'pmoreira'
@@ -13,11 +13,18 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     // https://mvnrepository.com/artifact/org.apache.spark/spark-core
-    compile group: 'org.apache.spark', name: 'spark-core_2.12', version: '3.1.0'
+    implementation group: 'org.apache.spark', name: 'spark-core_2.12', version: '3.1.0'
     // https://mvnrepository.com/artifact/org.apache.spark/spark-sql
-    compile group: 'org.apache.spark', name: 'spark-sql_2.12', version: '3.1.0'
+    implementation group: 'org.apache.spark', name: 'spark-sql_2.12', version: '3.1.0'
     // https://mvnrepository.com/artifact/org.projectlombok/lombok
-    compile group: 'org.projectlombok', name: 'lombok', version: '1.18.16'
+    //implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.16'
+
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '[1.18.,)'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '[1.18.,)'
+    testCompileOnly group: 'org.projectlombok', name: 'lombok', version: '[1.18.,)'
+    testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: '[1.18.,)'
+
+    compileOnly group: 'org.jetbrains', name: 'annotations', version: '[20.0.,)'
 
 }
 
