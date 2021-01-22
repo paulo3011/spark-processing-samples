@@ -1,17 +1,14 @@
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import pmoreira.pipeline.MapCsvToPosition;
-import pmoreira.pipeline.Position;
+import pmoreira.domain.models.Position;
 
 import static org.junit.Assert.*;
 
@@ -43,14 +40,6 @@ public class JsDateParseTest {
         String inputDate = jsfmt.format(data);
 
         assertEquals(inputDate, jsDate);
-
-        LocalDateTime localDate = this.convertToLocalDateViaMilisecond(data);
-    }
-
-    public LocalDateTime convertToLocalDateViaMilisecond(Date dateToConvert) {
-        return Instant.ofEpochMilli(dateToConvert.getTime())
-                .atZone(ZoneId.systemDefault())
-                .toLocalDateTime();
     }
 
     @Test
@@ -72,7 +61,6 @@ public class JsDateParseTest {
         float lat = Float.parseFloat(strLatitude);
         float longitude = Float.parseFloat(strLongitude);
         boolean ign = Boolean.parseBoolean(strIgnition);
-
 
         Position position = new Position();
         position.setLatitude(lat);

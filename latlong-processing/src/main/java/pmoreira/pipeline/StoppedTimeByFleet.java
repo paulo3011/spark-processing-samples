@@ -6,28 +6,19 @@ import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.ObjectArrayList;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.List;
 
-public class StoppedTimeByPlate implements Serializable {
+public class StoppedTimeByFleet implements Serializable {
     /**
-     * Vehicle plate
+     * Fleet
      */
     @Getter
     @Setter
-    private String plate;
-    /**
-     * Summarization property that holds the total of seconds stopped by vehicle
-     * - Tempo total parado por veículo, independente do POI
-     */
-    @Getter
-    @Setter
-    private SummaryStatistics totalStoppedTime = new SummaryStatistics();
+    private String fleet = "all";
 
     /**
      * Summarizations values by point of interest
-     * - Quantidade de tempo que os veículos passaram parados dentro de cada POI
-     * - Quantidade de tempo que os veículos estavam dentro de cada POI
+     * - Tempo total da frota gasto parado em cada POI
      */
     @Getter
     @Setter

@@ -1,18 +1,15 @@
 package pmoreira.pipeline;
 
-import org.apache.commons.lang3.StringUtils;
+import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.SparkConf;
-import org.apache.spark.sql.SparkSession;
+import pmoreira.domain.models.Position;
+import pmoreira.domain.models.StoppedTimeByPlateFact;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class batch {
     public static void main(String[] args) throws ParseException {
@@ -35,10 +32,33 @@ public class batch {
 
         JavaRDD<Position> positionsRDD = positionFileLines.mapPartitions(new MapCsvToPosition());
 
-        positionsRDD.collect().forEach(position -> {
-            System.out.println("plate:" + position.getPlate());
+        //positionsRDD.collect().forEach(position -> {System.out.println("plate:" + position.getPlate()); });
+
+        JavaPairRDD<String,Position> positionByPlatePairRDD = positionsRDD.mapPartitionsToPair(new MapToPairPlatePosition());
+
+        //positionByPlatePairRDD.collect().forEach(stringPositionTuple2 -> { System.out.println("plate: " + stringPositionTuple2._1);  });
+
+        JavaPairRDD<String,List<Position>> positionListByPlateRDD = new MapToListPositionByPlate().combinePositionsByPlate(positionByPlatePairRDD);
+
+        /*
+        positionListByPlateRDD.collect().forEach(stringPositionTuple2 -> {
+            System.out.println("plate: " + stringPositionTuple2._1 + " positions size: " +stringPositionTuple2._2.size());
+        });
+        */
+
+        //Tempo total parado por veículo, independente do POI.
+        JavaRDD<StoppedTimeByPlate> stoppedTimeByPlateJavaRDD = positionListByPlateRDD.mapPartitions(new MapToStoppedTimeByPlate());
+
+        //stoppedTimeByPlateJavaRDD.collect().forEach(summarization -> { String str = summarization.toString();  System.out.println(str); });
+
+        JavaRDD<StoppedTimeByPlateFact> stoppedTimeByPlateFactRDD = stoppedTimeByPlateJavaRDD.mapPartitions(new MapToStoppedTimeByPlateFact());
+
+        stoppedTimeByPlateFactRDD.collect().forEach(summarization -> {
+            String str = summarization.toString();
+            System.out.println(str);
         });
 
+        stoppedTimeByPlateFactRDD.saveAsTextFile("C:\\projetos\\paulo3011\\spark-processing-samples\\latlong-processing\\src\\Data\\output\\stoppedTimeByPlateFact");
     }
 
 

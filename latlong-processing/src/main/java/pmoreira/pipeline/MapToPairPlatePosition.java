@@ -2,6 +2,7 @@ package pmoreira.pipeline;
 
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.spark.api.java.function.PairFlatMapFunction;
+import pmoreira.domain.models.Position;
 import scala.Serializable;
 import scala.Tuple2;
 
@@ -9,7 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 
-public class MapGroupPositionByPlate
+public class MapToPairPlatePosition
         implements PairFlatMapFunction<Iterator<Position>, String, Position>, Serializable
 {
     @Override

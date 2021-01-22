@@ -1,4 +1,4 @@
-package pmoreira.pipeline;
+package pmoreira.domain.models;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

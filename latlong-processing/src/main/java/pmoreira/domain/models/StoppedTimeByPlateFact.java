@@ -6,33 +6,25 @@ import lombok.Setter;
 import java.io.Serializable;
 
 /**
- * Tempo total da frota gasto parado em cada POI;
+ * Tempo total parado por veículo, independente do POI.
  */
-public class StoppedTimeByFleetFact implements Serializable {
+public class StoppedTimeByPlateFact implements Serializable {
     /**
-     * Fleet
+     * Plate
      */
     @Getter
     @Setter
-    private String fleet = "all";
-    /**
-     * Point of interest who belongs the summarization.
-     */
-    @Getter
-    @Setter
-    private String pointOfInterest;
+    private String plate = "";
 
     /**
-     * Total of seconds stopped inside of poi.
+     * Total of seconds stopped
      */
     @Getter
     @Setter
-    private double totalSecondsStoppedInsidePoi = 0;
+    private double totalSecondsStopped = 0;
 
-    /**
-     * Total of seconds inside of poi. (plus)
-     */
-    @Getter
-    @Setter
-    private double totalSecondsInsidePoi = 0;
+    @Override
+    public String toString() {
+        return plate + "," + totalSecondsStopped;
+    }
 }

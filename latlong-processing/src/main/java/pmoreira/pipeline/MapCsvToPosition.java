@@ -4,6 +4,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.spark.api.java.function.FlatMapFunction;
+import pmoreira.domain.models.Position;
 
 import java.io.Serializable;
 import java.text.DateFormat;
