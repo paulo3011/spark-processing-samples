@@ -11,6 +11,7 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -19,6 +20,8 @@ dependencies {
     implementation group: 'org.apache.spark', name: 'spark-core_2.12', version: '3.0.1'
     // https://mvnrepository.com/artifact/org.apache.spark/spark-sql
     implementation group: 'org.apache.spark', name: 'spark-sql_2.12', version: '3.0.1'
+    //
+    implementation group: 'com.github.grumlimited', name: 'geocalc', version: '0.6'
 
     // https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-common
     //implementation group: 'org.apache.hadoop', name: 'hadoop-common', version: '3.2.0'
