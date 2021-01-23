@@ -1,10 +1,13 @@
 plugins {
     //id 'io.franzbecker.gradle-lombok' version '1.11'
-    id 'java-library'
+    //id 'java-library'
+    id 'java'
 }
 
 group 'pmoreira'
 version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -13,17 +16,19 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     // https://mvnrepository.com/artifact/org.apache.spark/spark-core
-    implementation group: 'org.apache.spark', name: 'spark-core_2.12', version: '3.1.0'
+    implementation group: 'org.apache.spark', name: 'spark-core_2.12', version: '3.0.1'
     // https://mvnrepository.com/artifact/org.apache.spark/spark-sql
-    implementation group: 'org.apache.spark', name: 'spark-sql_2.12', version: '3.1.0'
-    // https://mvnrepository.com/artifact/org.projectlombok/lombok
-    //implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.16'
+    implementation group: 'org.apache.spark', name: 'spark-sql_2.12', version: '3.0.1'
+
+    // https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-common
+    //implementation group: 'org.apache.hadoop', name: 'hadoop-common', version: '3.2.0'
+    // https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-hdfs-client
+    //implementation group: 'org.apache.hadoop', name: 'hadoop-hdfs-client', version: '3.2.0'
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '[1.18.,)'
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '[1.18.,)'
     testCompileOnly group: 'org.projectlombok', name: 'lombok', version: '[1.18.,)'
     testAnnotationProcessor group: 'org.projectlombok', name: 'lombok', version: '[1.18.,)'
-
     compileOnly group: 'org.jetbrains', name: 'annotations', version: '[20.0.,)'
 
 }

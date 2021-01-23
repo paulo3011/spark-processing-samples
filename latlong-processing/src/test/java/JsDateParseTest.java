@@ -69,4 +69,6 @@ public class JsDateParseTest {
         position.setSpeed(speed);
         position.setPositionDate(dta);
     }
+
+
 }

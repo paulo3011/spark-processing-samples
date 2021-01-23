@@ -2,15 +2,23 @@
 
 1. Setup java sdk para versão 15 ou superior
 
-2. Configurar dependências no gradlew
+2. Instale o Spark e configure SPARK_HOME
+
+3. Instale o Hadoop e configure HADDOP_HOME
+
+4. Se windows baixe o winutils e mova para a bin do hadoop
+
+5. Se windows reinicie a máquina
+
+6. Configurar dependências no gradlew
 
 ```groovy
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     // https://mvnrepository.com/artifact/org.apache.spark/spark-core
-    compile group: 'org.apache.spark', name: 'spark-core_2.12', version: '3.1.0'
+    implementation group: 'org.apache.spark', name: 'spark-core_2.12', version: '3.0.1'
     // https://mvnrepository.com/artifact/org.apache.spark/spark-sql
-    compile group: 'org.apache.spark', name: 'spark-sql_2.12', version: '3.1.0'
+    implementation group: 'org.apache.spark', name: 'spark-sql_2.12', version: '3.0.1'
 }
 ```
 
@@ -29,11 +37,14 @@ import org.apache.spark.SparkConf;
 - https://medium.com/@eyaldahari/how-to-run-apache-spark-with-hadoop-using-intellij-on-windows-359a8421507b
 - https://mvnrepository.com/artifact/org.apache.spark/spark-core_2.12/3.1.0
 - https://spark.apache.org/examples.html
+- https://spark.apache.org/docs/latest/configuration.html#environment-variables
 
 ### Download hadoop
 
 - https://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html#Download
 - https://downloads.apache.org/hadoop/common/stable/
+
+*  Spark needs a piece of Hadoop to run. For Hadoop 2.7, you need to install winutils.exe.
 
 ## Geolocalização
 
