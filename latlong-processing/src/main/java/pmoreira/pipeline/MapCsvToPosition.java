@@ -4,6 +4,8 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.spark.api.java.function.FlatMapFunction;
+import org.apache.spark.broadcast.Broadcast;
+import pmoreira.domain.models.PointOfInterest;
 import pmoreira.domain.models.Position;
 
 import java.io.Serializable;
@@ -18,23 +20,32 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
-@NoArgsConstructor
+
 public class MapCsvToPosition
         implements FlatMapFunction<Iterator<String>, Position>, Serializable
 {
+    public MapCsvToPosition(){
+
+    }
+
+    public MapCsvToPosition(Broadcast<List<PointOfInterest>> broadcastPoiRDD){
+        this.broadcastPoiRDD = broadcastPoiRDD;
+    }
+
+    /**
+     * List of point of interest
+     */
+    private Broadcast<List<PointOfInterest>> broadcastPoiRDD;
+
     @Override
     public Iterator<Position> call(Iterator<String> csvLinesPerPartition) throws Exception {
         final List<Position> result = new ObjectArrayList<>();
 
-        boolean isHeader = true;
-
         while (csvLinesPerPartition.hasNext()) {
             final String textLine = csvLinesPerPartition.next();
 
-            if(isHeader) {
-                isHeader = false;
+            if(this.isValid(textLine)==false)
                 continue;
-            }
 
             try {
                 Position converted = Convert(textLine);
@@ -47,6 +58,12 @@ public class MapCsvToPosition
         }
 
         return result.iterator();
+    }
+
+    private boolean isValid(String textLine) {
+        if(textLine == null || textLine.startsWith("placa"))
+            return false;
+        return true;
     }
 
     private Position Convert(final String textLine) throws ParseException {
@@ -69,8 +86,22 @@ public class MapCsvToPosition
         position.setLongitude(longitude);
         position.setLatitude(latitude);
         position.setIgnition(ignition);
+        position.setNearestPointOfInterest(this.findNearestPointOfInterest(position));
 
         return position;
+    }
+
+    private PointOfInterest findNearestPointOfInterest(Position position) {
+        if(this.broadcastPoiRDD == null)
+            return null;
+
+        for(final PointOfInterest pointOfInterest: this.broadcastPoiRDD.getValue()){
+            if(position.isInsidePointOfInterest(pointOfInterest)){
+                return pointOfInterest;
+            }
+        }
+
+        return null;
     }
 
     public LocalDateTime convertToLocalDateTimeFromMilisecond(Date dateToConvert) {

@@ -2,7 +2,6 @@ package pmoreira.pipeline;
 
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.spark.api.java.function.FlatMapFunction;
-import pmoreira.domain.models.StoppedTimeByFleetFact;
 import pmoreira.domain.models.StoppedTimeByPlateFact;
 
 import java.io.Serializable;

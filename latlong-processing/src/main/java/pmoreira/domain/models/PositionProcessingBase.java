@@ -10,4 +10,9 @@ public abstract class PositionProcessingBase implements Serializable {
      */
     @Getter
     protected Position previousPosition = null;
+    /**
+     * Previous point of interest
+     */
+    @Getter
+    protected PointOfInterest previousNearestPointOfInterest = null;
 }
