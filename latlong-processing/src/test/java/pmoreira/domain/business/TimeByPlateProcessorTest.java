@@ -1,12 +1,14 @@
 package pmoreira.domain.business;
 
 import org.junit.Test;
+import org.sparkproject.guava.collect.Lists;
 import pmoreira.domain.models.PointOfInterest;
 import pmoreira.domain.models.Position;
 import pmoreira.domain.models.TimeByPoi;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static org.junit.Assert.assertEquals;
 
@@ -246,5 +248,21 @@ public class TimeByPlateProcessorTest {
         assertEquals(processar.getTotalStoppedTime().getSum(), stoppedRegardlessPoi, 0.0);
         assertEquals(timeByPoiAtStart.getTotalSecondsInsidePoi().getSum(), insideAtPoiStart, 0.0);
         assertEquals(timeByPoiAtStart.getTotalSecondsStoppedInsidePoi().getSum(), stoppedAtPoiStart, 0.0);
+    }
+
+    @Test
+    public void sortTest() {
+
+        ArrayList<Position> trip = (ArrayList<Position>)this.buildPrdAgostinhoTrip4("ATC4504");
+        ArrayList<Position> tripUnSort = new ArrayList<>();
+        tripUnSort.add(trip.get(1));
+        tripUnSort.add(trip.get(4));
+        tripUnSort.add(trip.get(0));
+        tripUnSort.add(trip.get(3));
+
+        ArrayList<Position> tripToSort = Lists.newArrayList(tripUnSort.iterator());
+        tripToSort.sort(Position::orderByPositionDate);
+
+        //Collections.sort(trip,Position::orderByPositionDate);
     }
 }
