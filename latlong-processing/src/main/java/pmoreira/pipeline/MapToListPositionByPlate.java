@@ -13,7 +13,7 @@ public class MapToListPositionByPlate implements Serializable {
      * @param positionJavaPairRDD
      * @return
      */
-    public JavaPairRDD<String,List<Position>> combinePositionsByPlate(JavaPairRDD<String,Position> positionJavaPairRDD){
+    public JavaPairRDD<String,List<Position>> groupPositionsByPlate(JavaPairRDD<String,Position> positionJavaPairRDD){
         return positionJavaPairRDD.combineByKey(
                 this::createNewPositionListForEachPlate,
                 this::mergePositionsFromSamePlate,
