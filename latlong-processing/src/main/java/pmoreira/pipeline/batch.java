@@ -10,10 +10,18 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.storage.StorageLevel;
+import pmoreira.domain.business.StoppedTimeByPlate;
 import pmoreira.domain.models.PointOfInterest;
 import pmoreira.domain.models.Position;
 import pmoreira.domain.models.StoppedTimeByPlateFact;
 import pmoreira.domain.models.StoppedTimeByPointOfInterestFact;
+import pmoreira.pipeline.rddmaps.MapCsvToPointOfInterest;
+import pmoreira.pipeline.rddmaps.MapCsvToPosition;
+import pmoreira.pipeline.rddmaps.MapToListPositionByPlate;
+import pmoreira.pipeline.rddmaps.MapToPairPlatePosition;
+import pmoreira.pipeline.summarizations.MapToStoppedTimeByPlate;
+import pmoreira.pipeline.summarizations.MapToStoppedTimeByPlateFact;
+import pmoreira.pipeline.summarizations.MapToStoppedTimeByPointOfInterestFact;
 
 import java.io.IOException;
 import java.nio.file.Path;

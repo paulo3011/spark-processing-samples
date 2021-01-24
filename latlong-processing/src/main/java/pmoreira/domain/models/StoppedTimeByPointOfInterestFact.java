@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.io.Serializable;
 
 /**
- * Tempo total da frota gasto parado em cada POI;
+ * Total of seconds stopped by plate and point of interest.
  */
 public class StoppedTimeByPointOfInterestFact implements Serializable {
     /**

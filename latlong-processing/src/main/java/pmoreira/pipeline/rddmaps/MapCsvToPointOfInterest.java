@@ -1,4 +1,4 @@
-package pmoreira.pipeline;
+package pmoreira.pipeline.rddmaps;
 
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;

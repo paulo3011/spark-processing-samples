@@ -1,8 +1,10 @@
-package pmoreira.pipeline;
+package pmoreira.pipeline.summarizations;
 
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import pmoreira.domain.models.StoppedTimeByPointOfInterestFact;
+import pmoreira.domain.business.StoppedTimeByPlate;
+import pmoreira.domain.models.StoppedTimeByPoi;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -28,7 +30,7 @@ public class MapToStoppedTimeByPointOfInterestFact
     private List<StoppedTimeByPointOfInterestFact> Convert(StoppedTimeByPlate summarization) {
         List<StoppedTimeByPointOfInterestFact> result = new ObjectArrayList<>();
 
-        final HashMap<String,StoppedTimeByPoi>  poiSummarization = summarization.getStoppedTimeByPoi();
+        final HashMap<String, StoppedTimeByPoi>  poiSummarization = summarization.getStoppedTimeByPoi();
 
         for(final String key : summarization.getStoppedTimeByPoi().keySet())
         {

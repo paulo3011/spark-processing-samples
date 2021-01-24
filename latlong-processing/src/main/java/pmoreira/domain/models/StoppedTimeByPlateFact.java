@@ -6,7 +6,7 @@ import lombok.Setter;
 import java.io.Serializable;
 
 /**
- * Tempo total parado por veículo, independente do POI.
+ * Total of seconds stopped by plate
  */
 public class StoppedTimeByPlateFact implements Serializable {
     /**
