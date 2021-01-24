@@ -12,7 +12,21 @@
 
 # Como executar
 
+## Via intellij
 
+Execute a classe BatchPositionProcessor via debug.
+
+1. Configure os parâmetros dos arquivos de posição, poi e do diretório de saída dos arquivos do processamento
+
+```shell script
+-positions ~/tmp/position_processing/source/posicoes.csv -poi ~/tmp/position_processing/source/poi/base_pois_def.csv -output ~/tmp/position_processing/output/
+```
+
+## Via shell
+
+```shell script
+java -jar BatchPositionProcessor.jar -positions ~/tmp/position_processing/source/posicoes.csv -poi ~/tmp/position_processing/source/poi/base_pois_def.csv -output ~/tmp/position_processing/output/
+```
 
 # Referências
 
