@@ -38,7 +38,7 @@ dependencies {
 jar {
     manifest {
         attributes(
-                'Main-Class': 'pmoreira.pipeline.batch'
+                'Main-Class': 'pmoreira.application.batchprocessing.BatchPositionProcessor'
         )
     }
 }
