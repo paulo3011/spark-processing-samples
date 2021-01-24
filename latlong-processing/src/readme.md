@@ -25,7 +25,7 @@ Execute a classe BatchPositionProcessor via debug.
 ## Via shell
 
 ```shell script
-java -jar BatchPositionProcessor.jar -positions ~/tmp/position_processing/source/posicoes.csv -poi ~/tmp/position_processing/source/poi/base_pois_def.csv -output ~/tmp/position_processing/output/
+java -jar latlong-processing-1.0-SNAPSHOT.jar -positions C:\tmp\positions\posicoes.csv -poi C:\tmp\positions\base_pois_def.csv -output C:\tmp\positions\output
 ```
 
 # Referências
