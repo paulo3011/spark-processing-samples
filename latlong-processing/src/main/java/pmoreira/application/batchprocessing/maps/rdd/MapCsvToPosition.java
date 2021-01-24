@@ -1,4 +1,4 @@
-package pmoreira.pipeline.rddmaps;
+package pmoreira.application.batchprocessing.maps.rdd;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.ObjectArrayList;

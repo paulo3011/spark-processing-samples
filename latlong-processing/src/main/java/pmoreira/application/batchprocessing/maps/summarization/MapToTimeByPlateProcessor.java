@@ -1,4 +1,4 @@
-package pmoreira.pipeline.summarizations;
+package pmoreira.application.batchprocessing.maps.summarization;
 
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.spark.api.java.function.FlatMapFunction;

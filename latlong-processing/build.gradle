@@ -23,10 +23,9 @@ dependencies {
     //
     implementation group: 'com.github.grumlimited', name: 'geocalc', version: '0.6'
 
-    // https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-common
-    //implementation group: 'org.apache.hadoop', name: 'hadoop-common', version: '3.2.0'
-    // https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-hdfs-client
-    //implementation group: 'org.apache.hadoop', name: 'hadoop-hdfs-client', version: '3.2.0'
+    // https://mvnrepository.com/artifact/com.beust/jcommander
+    implementation group: 'com.beust', name: 'jcommander', version: '1.78'
+
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '[1.18.,)'
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '[1.18.,)'

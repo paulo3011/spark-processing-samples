@@ -7,7 +7,7 @@ import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
-import pmoreira.pipeline.rddmaps.MapCsvToPosition;
+import pmoreira.application.batchprocessing.maps.rdd.MapCsvToPosition;
 import pmoreira.domain.models.Position;
 
 import static org.junit.Assert.*;

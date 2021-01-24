@@ -1,4 +1,4 @@
-package pmoreira.pipeline.rddmaps;
+package pmoreira.application.batchprocessing.maps.rdd;
 
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.spark.api.java.function.FlatMapFunction;
