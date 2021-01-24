@@ -1,4 +1,4 @@
-package pmoreira.pipeline.summarizations;
+package pmoreira.pipeline.rddmaps;
 
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.spark.api.java.function.FlatMapFunction;
@@ -34,22 +34,16 @@ public class MapToTimeByPoiAndPlateFact
 
         for(final String key : summarization.getTimeByPoi().keySet())
         {
-            try {
-                final TimeByPoi timeByPoi = poiSummarization.get(key);
-                TimeByPoiAndPlateFact stoppedTimeByPoiAndPlateFact = new TimeByPoiAndPlateFact();
-                final double totalSecondsStoppedInsidePoi = timeByPoi.getTotalSecondsStoppedInsidePoi().getSum();
-                final double totalSecondsInsidePoi = timeByPoi.getTotalSecondsInsidePoi().getSum();
-                stoppedTimeByPoiAndPlateFact.setTotalSecondsStoppedInsidePoi(totalSecondsStoppedInsidePoi);
-                stoppedTimeByPoiAndPlateFact.setTotalSecondsInsidePoi(totalSecondsInsidePoi);
-                stoppedTimeByPoiAndPlateFact.setPointOfInterest(timeByPoi.getPointOfInterest().getName());
-                stoppedTimeByPoiAndPlateFact.setPlate(summarization.getPlate());
-                result.add(stoppedTimeByPoiAndPlateFact);
-            }
-            catch (Exception ex){
-                System.out.println(ex);
-            }
+            final TimeByPoi timeByPoi = poiSummarization.get(key);
+            TimeByPoiAndPlateFact stoppedTimeByPoiAndPlateFact = new TimeByPoiAndPlateFact();
+            final double totalSecondsStoppedInsidePoi = timeByPoi.getTotalSecondsStoppedInsidePoi().getSum();
+            final double totalSecondsInsidePoi = timeByPoi.getTotalSecondsInsidePoi().getSum();
+            stoppedTimeByPoiAndPlateFact.setTotalSecondsStoppedInsidePoi(totalSecondsStoppedInsidePoi);
+            stoppedTimeByPoiAndPlateFact.setTotalSecondsInsidePoi(totalSecondsInsidePoi);
+            stoppedTimeByPoiAndPlateFact.setPointOfInterest(timeByPoi.getPointOfInterest().getName());
+            stoppedTimeByPoiAndPlateFact.setPlate(summarization.getPlate());
+            result.add(stoppedTimeByPoiAndPlateFact);
         }
-        //stoppedTimeByFleetFact.setTotalSecondsInsidePoi(summarization.getT);
 
         return result;
     }

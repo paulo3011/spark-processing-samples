@@ -1,4 +1,4 @@
-package pmoreira.pipeline.summarizations;
+package pmoreira.pipeline.rddmaps;
 
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.spark.api.java.function.FlatMapFunction;
@@ -13,24 +13,23 @@ public class MapToStoppedTimeByPlateFact
         implements FlatMapFunction<Iterator<TimeByPlateProcessor>, StoppedTimeByPlateFact>, Serializable
 {
     @Override
-    public Iterator<StoppedTimeByPlateFact> call(Iterator<TimeByPlateProcessor> stoppedTimeByPlateIterator)
-            throws Exception {
+    public Iterator<StoppedTimeByPlateFact> call(Iterator<TimeByPlateProcessor> stoppedTimeByPlateIterator) {
         final List<StoppedTimeByPlateFact> result = new ObjectArrayList<>();
 
         while (stoppedTimeByPlateIterator.hasNext()) {
             final TimeByPlateProcessor summarization = stoppedTimeByPlateIterator.next();
-            StoppedTimeByPlateFact converted = Convert(summarization);
+            StoppedTimeByPlateFact converted = convert(summarization);
             result.add(converted);
         }
 
         return result.iterator();
     }
 
-    private StoppedTimeByPlateFact Convert(TimeByPlateProcessor summarization) {
-        StoppedTimeByPlateFact stoppedTimeByFleetFact = new StoppedTimeByPlateFact();
-        stoppedTimeByFleetFact.setPlate(summarization.getPlate());
-        final double totalStoppedTime = summarization.getTotalStoppedTime().getSum();
-        stoppedTimeByFleetFact.setTotalSecondsStopped(totalStoppedTime);
-        return stoppedTimeByFleetFact;
+    private StoppedTimeByPlateFact convert(TimeByPlateProcessor timeByPlateProcessor) {
+        StoppedTimeByPlateFact fact = new StoppedTimeByPlateFact();
+        fact.setPlate(timeByPlateProcessor.getPlate());
+        final double totalStoppedTime = timeByPlateProcessor.getTotalStoppedTime().getSum();
+        fact.setTotalSecondsStopped(totalStoppedTime);
+        return fact;
     }
 }

@@ -16,8 +16,8 @@ import pmoreira.pipeline.rddmaps.MapCsvToPointOfInterest;
 import pmoreira.pipeline.rddmaps.MapCsvToPosition;
 import pmoreira.pipeline.summarizations.MapToStoppedTimeByPoiFact;
 import pmoreira.pipeline.summarizations.MapToTimeByPlateProcessor;
-import pmoreira.pipeline.summarizations.MapToStoppedTimeByPlateFact;
-import pmoreira.pipeline.summarizations.MapToTimeByPoiAndPlateFact;
+import pmoreira.pipeline.rddmaps.MapToStoppedTimeByPlateFact;
+import pmoreira.pipeline.rddmaps.MapToTimeByPoiAndPlateFact;
 
 import java.io.IOException;
 import java.nio.file.Path;

@@ -2,7 +2,6 @@ package pmoreira.pipeline.summarizations;
 
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.spark.api.java.function.FlatMapFunction;
-import pmoreira.domain.business.TimeByPlateProcessor;
 import pmoreira.domain.models.StoppedTimeByPoiFact;
 import pmoreira.domain.models.TimeByPoiAndPlateFact;
 import scala.Tuple2;
