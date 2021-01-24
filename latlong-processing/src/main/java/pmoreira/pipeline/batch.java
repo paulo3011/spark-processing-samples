@@ -18,17 +18,15 @@ import pmoreira.domain.models.StoppedTimeByPointOfInterestFact;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.text.ParseException;
 import java.util.List;
 
 public class batch {
-    public static void main(String[] args) throws ParseException, IOException {
+    public static void main(String[] args) throws IOException {
         System.out.println("Starting batch processing");
-        //System.setProperty("hadoop.home.dir", "C:\\Users\\moreira\\bin\\hadoop-3.3.0\\");
 
-        /**
-         * The first thing a Spark program must do is to create a JavaSparkContext object, which tells Spark how to access a cluster.
-         * To create a SparkContext you first need to build a SparkConf object that contains information about your application.
+        /*
+          The first thing a Spark program must do is to create a JavaSparkContext object, which tells Spark how to access a cluster.
+          To create a SparkContext you first need to build a SparkConf object that contains information about your application.
          */
         SparkConf sparkConf = new SparkConf()
                 .setAppName("PositionProcessing")
