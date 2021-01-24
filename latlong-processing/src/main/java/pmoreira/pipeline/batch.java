@@ -10,7 +10,7 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.storage.StorageLevel;
-import pmoreira.domain.business.StoppedTimeByPlate;
+import pmoreira.domain.business.TimeByPlate;
 import pmoreira.domain.models.PointOfInterest;
 import pmoreira.domain.models.Position;
 import pmoreira.domain.models.StoppedTimeByPlateFact;
@@ -60,23 +60,23 @@ public class batch {
         JavaPairRDD<String,Position> positionByPlatePairRDD = positionsRDD.mapPartitionsToPair(new MapToPairPlatePosition());
         JavaPairRDD<String,List<Position>> positionListByPlateRDD = new MapToListPositionByPlate().groupPositionsByPlate(positionByPlatePairRDD);
 
-        JavaRDD<StoppedTimeByPlate> stoppedTimeByPlateJavaRDD = positionListByPlateRDD.mapPartitions(new MapToStoppedTimeByPlate());
+        JavaRDD<TimeByPlate> stoppedTimeByPlateJavaRDD = positionListByPlateRDD.mapPartitions(new MapToStoppedTimeByPlate());
         stoppedTimeByPlateJavaRDD.persist(StorageLevel.MEMORY_AND_DISK());
 
         WriteToDisk(stoppedTimeByPlateJavaRDD,sparkSession);
     }
 
-    public static void WriteToDisk(JavaRDD<StoppedTimeByPlate> stoppedTimeByPlateJavaRDD, SparkSession sparkSession) throws IOException {
+    public static void WriteToDisk(JavaRDD<TimeByPlate> stoppedTimeByPlateJavaRDD, SparkSession sparkSession) throws IOException {
         WriteToDiskStoppedTimeByPointOfInterestFact(stoppedTimeByPlateJavaRDD, sparkSession);
         WriteToDiskStoppedTimeByPlateFact(stoppedTimeByPlateJavaRDD, sparkSession);
     }
 
-    public static void WriteToDiskStoppedTimeByPlateFact(JavaRDD<StoppedTimeByPlate> stoppedTimeByPlateJavaRDD, SparkSession sparkSession) throws IOException {
+    public static void WriteToDiskStoppedTimeByPlateFact(JavaRDD<TimeByPlate> stoppedTimeByPlateJavaRDD, SparkSession sparkSession) throws IOException {
         JavaRDD<StoppedTimeByPlateFact> rdd = stoppedTimeByPlateJavaRDD.mapPartitions(new MapToStoppedTimeByPlateFact());
         WriteCsvToDisk(rdd, StoppedTimeByPlateFact.class,sparkSession,"C:\\tmp\\positions\\StoppedTimeByPlateFact");
     }
 
-    public static void WriteToDiskStoppedTimeByPointOfInterestFact(JavaRDD<StoppedTimeByPlate> stoppedTimeByPlateJavaRDD, SparkSession sparkSession) throws IOException {
+    public static void WriteToDiskStoppedTimeByPointOfInterestFact(JavaRDD<TimeByPlate> stoppedTimeByPlateJavaRDD, SparkSession sparkSession) throws IOException {
         JavaRDD<StoppedTimeByPointOfInterestFact> rdd = stoppedTimeByPlateJavaRDD.mapPartitions(new MapToStoppedTimeByPointOfInterestFact());
         WriteCsvToDisk(rdd, StoppedTimeByPointOfInterestFact.class,sparkSession,"C:\\tmp\\positions\\StoppedTimeByPointOfInterestFact");
     }

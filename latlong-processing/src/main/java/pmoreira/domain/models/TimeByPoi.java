@@ -8,11 +8,10 @@ import pmoreira.domain.models.PointOfInterest;
 import java.io.Serializable;
 
 /**
- * Represent the summarization values by point of interest:
- * - total of seconds stopped inside of poi
- * - total of seconds inside of poi
+ * Represent the summarization values by point of interest
+ * (time inside and time stopped inside of poi)
  */
-public class StoppedTimeByPoi implements Serializable {
+public class TimeByPoi implements Serializable {
     /**
      * Point of interest who belongs the summarization.
      */

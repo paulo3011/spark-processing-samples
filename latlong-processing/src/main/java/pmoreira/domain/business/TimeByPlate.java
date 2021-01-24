@@ -7,12 +7,12 @@ import pmoreira.domain.contracts.IPositionProcessing;
 import pmoreira.domain.models.PointOfInterest;
 import pmoreira.domain.models.Position;
 import pmoreira.domain.models.PositionProcessingBase;
-import pmoreira.domain.models.StoppedTimeByPoi;
+import pmoreira.domain.models.TimeByPoi;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class StoppedTimeByPlate extends PositionProcessingBase implements IPositionProcessing {
+public class TimeByPlate extends PositionProcessingBase implements IPositionProcessing {
     /**
      * Vehicle plate
      */
@@ -20,42 +20,38 @@ public class StoppedTimeByPlate extends PositionProcessingBase implements IPosit
     private String plate;
     /**
      * Summarization property that holds the total of seconds stopped by vehicle
-     * - Tempo total parado por veículo, independente do POI
      */
     @Getter @Setter
     private SummaryStatistics totalStoppedTime = new SummaryStatistics();
 
     /**
      * Summarizations values by point of interest
-     * - Quantidade de tempo que os veículos passaram parados dentro de cada POI
-     * - Quantidade de tempo que os veículos estavam dentro de cada POI
      */
     @Getter @Setter
-    private HashMap<String, StoppedTimeByPoi> stoppedTimeByPoi = new HashMap<>();
+    private HashMap<String, TimeByPoi> timeByPoi = new HashMap<>();
 
     @Getter
     public Position previousPosition = null;
 
     @Override
     public String toString() {
-        return "StoppedTimeByPlate{" +
-                "plate='" + plate + '\'' +
-                ", totalStoppedTime=" + totalStoppedTime.getSum() +
-                '}';
+        return plate + ',' + totalStoppedTime.getSum();
     }
 
     public void ProcessNextPosition(final Position currentPosition)
     {
         if(this.previousPosition == null)
             return;
+        this.ProcessStoppedTimeInsidePoi(currentPosition);
+        this.processPointOfInterest(currentPosition);
+    }
 
+     public void ProcessStoppedTimeInsidePoi(Position currentPosition){
         if(!currentPosition.isStopped())
             return;
 
         final long timeStoppedToAdd = this.previousPosition.getSecondsFromNext(currentPosition);
         totalStoppedTime.addValue(timeStoppedToAdd);
-
-        this.processPointOfInterest(currentPosition);
     }
 
     /**
@@ -66,16 +62,16 @@ public class StoppedTimeByPlate extends PositionProcessingBase implements IPosit
         if(this.previousNearestPointOfInterest == null || currentPosition.getNearestPointOfInterest() == null)
             return;
 
-        final PointOfInterest currentPointOfInterest = currentPosition.getNearestPointOfInterest();
-        StoppedTimeByPoi currentStoppedTimeByPoi = new StoppedTimeByPoi();
-        currentStoppedTimeByPoi.setPointOfInterest(currentPointOfInterest);
+        final PointOfInterest currentPoi = currentPosition.getNearestPointOfInterest();
+        TimeByPoi currentSummarization = new TimeByPoi();
+        currentSummarization.setPointOfInterest(currentPoi);
 
-        if(stoppedTimeByPoi.containsKey(currentPointOfInterest.getName()))
-            currentStoppedTimeByPoi = stoppedTimeByPoi.get(currentPointOfInterest.getName());
+        if(this.timeByPoi.containsKey(currentPoi.getName()))
+            currentSummarization = this.timeByPoi.get(currentPoi.getName());
 
         long timeStoppedInsidePoi = 0;
         long timeInsidePoi = 0;
-        boolean isSamePointOfInterest = (currentPointOfInterest.getName().equals(this.previousNearestPointOfInterest.getName()));
+        boolean isSamePointOfInterest = (currentPoi.getName().equals(this.previousNearestPointOfInterest.getName()));
 
         if(isSamePointOfInterest)
             timeInsidePoi = this.previousPosition.getSecondsFromNext(currentPosition);
@@ -85,10 +81,10 @@ public class StoppedTimeByPlate extends PositionProcessingBase implements IPosit
                 timeStoppedInsidePoi = timeInsidePoi;
         }
 
-        currentStoppedTimeByPoi.getTotalSecondsInsidePoi().addValue(timeInsidePoi);
-        currentStoppedTimeByPoi.getTotalSecondsStoppedInsidePoi().addValue(timeStoppedInsidePoi);
+        currentSummarization.getTotalSecondsInsidePoi().addValue(timeInsidePoi);
+        currentSummarization.getTotalSecondsStoppedInsidePoi().addValue(timeStoppedInsidePoi);
 
-        stoppedTimeByPoi.put(currentPointOfInterest.getName(), currentStoppedTimeByPoi);
+        this.timeByPoi.put(currentPoi.getName(), currentSummarization);
     }
 
     public void ProcessAllPosition(final List<Position> positionList)
