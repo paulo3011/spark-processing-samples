@@ -10,7 +10,6 @@ import pmoreira.domain.models.PositionProcessingBase;
 import pmoreira.domain.models.TimeByPoi;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class TimeByPlateProcessor extends PositionProcessingBase implements IPositionProcessing {
     /**
@@ -38,15 +37,15 @@ public class TimeByPlateProcessor extends PositionProcessingBase implements IPos
         return plate + ',' + totalStoppedTime.getSum();
     }
 
-    public void ProcessNextPosition(final Position currentPosition)
+    public void processNextPosition(final Position currentPosition)
     {
         if(this.previousPosition == null)
             return;
-        this.ProcessStoppedTimeInsidePoi(currentPosition);
+        this.processStoppedTimeInsidePoi(currentPosition);
         this.processPointOfInterest(currentPosition);
     }
 
-     public void ProcessStoppedTimeInsidePoi(Position currentPosition){
+     public void processStoppedTimeInsidePoi(Position currentPosition){
         if(!currentPosition.isStopped())
             return;
 
@@ -87,14 +86,13 @@ public class TimeByPlateProcessor extends PositionProcessingBase implements IPos
         this.timeByPoi.put(currentPoi.getName(), currentSummarization);
     }
 
-    public void ProcessAllPosition(final Iterable<Position> positionList)
+    public void processAllPosition(final Iterable<Position> positionList)
     {
         for(final Position currentPosition : positionList)
         {
-            this.ProcessNextPosition(currentPosition);
+            this.processNextPosition(currentPosition);
             this.previousPosition = currentPosition;
             this.previousNearestPointOfInterest = currentPosition.getNearestPointOfInterest();
         }
     }
-
 }

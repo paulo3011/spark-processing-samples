@@ -12,29 +12,25 @@ public class PointOfInterest implements Serializable {
     /**
      * Point of interest name
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private String name = "";
 
     /**
      * The center latitude of point of interest
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private float latitude;
 
     /**
      * The center longitude of point of interest
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private float longitude;
 
     /**
      * The radius in meter of point of reference
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private float radius;
 
     @Override

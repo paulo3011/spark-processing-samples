@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
-public class MapToStoppedTimeByPlate
+public class MapToTimeByPlateProcessor
         implements FlatMapFunction<Iterator<Tuple2<String, Iterable<Position>>>, TimeByPlateProcessor>, Serializable
 {
     @Override
@@ -22,7 +22,7 @@ public class MapToStoppedTimeByPlate
             Tuple2<String, Iterable<Position>> positionsKeyPair = tuple2Iterator.next();
             TimeByPlateProcessor summarization = new TimeByPlateProcessor();
             summarization.setPlate(positionsKeyPair._1);
-            summarization.ProcessAllPosition(positionsKeyPair._2());
+            summarization.processAllPosition(positionsKeyPair._2());
             summarizations.add(summarization);
         }
 

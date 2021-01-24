@@ -12,15 +12,13 @@ public class StoppedTimeByPlateFact implements Serializable {
     /**
      * Plate
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private String plate = "";
 
     /**
      * Total of seconds stopped
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private double totalSecondsStopped = 0;
 
     @Override

@@ -9,11 +9,11 @@ public interface IPositionProcessing {
      * Process the next position
      * @param nextPosition
      */
-    void ProcessNextPosition(final Position nextPosition);
+    void processNextPosition(final Position nextPosition);
 
     /**
      * Process all positions
      * @param positionList
      */
-    void ProcessAllPosition(final Iterable<Position> positionList);
+    void processAllPosition(final Iterable<Position> positionList);
 }

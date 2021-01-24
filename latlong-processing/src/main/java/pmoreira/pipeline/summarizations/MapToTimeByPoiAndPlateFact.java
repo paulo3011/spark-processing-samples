@@ -2,7 +2,7 @@ package pmoreira.pipeline.summarizations;
 
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.spark.api.java.function.FlatMapFunction;
-import pmoreira.domain.models.StoppedTimeByPointOfInterestFact;
+import pmoreira.domain.models.TimeByPoiAndPlateFact;
 import pmoreira.domain.business.TimeByPlateProcessor;
 import pmoreira.domain.models.TimeByPoi;
 
@@ -11,24 +11,24 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-public class MapToStoppedTimeByPointOfInterestFact
-        implements FlatMapFunction<Iterator<TimeByPlateProcessor>, StoppedTimeByPointOfInterestFact>, Serializable
+public class MapToTimeByPoiAndPlateFact
+        implements FlatMapFunction<Iterator<TimeByPlateProcessor>, TimeByPoiAndPlateFact>, Serializable
 {
     @Override
-    public Iterator<StoppedTimeByPointOfInterestFact> call(Iterator<TimeByPlateProcessor> stoppedTimeByPlateIterator) {
-        final List<StoppedTimeByPointOfInterestFact> result = new ObjectArrayList<>();
+    public Iterator<TimeByPoiAndPlateFact> call(Iterator<TimeByPlateProcessor> stoppedTimeByPlateIterator) {
+        final List<TimeByPoiAndPlateFact> result = new ObjectArrayList<>();
 
         while (stoppedTimeByPlateIterator.hasNext()) {
             final TimeByPlateProcessor summarization = stoppedTimeByPlateIterator.next();
-            List<StoppedTimeByPointOfInterestFact> converted = Convert(summarization);
+            List<TimeByPoiAndPlateFact> converted = Convert(summarization);
             result.addAll(converted);
         }
 
         return result.iterator();
     }
 
-    private List<StoppedTimeByPointOfInterestFact> Convert(TimeByPlateProcessor summarization) {
-        List<StoppedTimeByPointOfInterestFact> result = new ObjectArrayList<>();
+    private List<TimeByPoiAndPlateFact> Convert(TimeByPlateProcessor summarization) {
+        List<TimeByPoiAndPlateFact> result = new ObjectArrayList<>();
 
         final HashMap<String, TimeByPoi>  poiSummarization = summarization.getTimeByPoi();
 
@@ -36,14 +36,14 @@ public class MapToStoppedTimeByPointOfInterestFact
         {
             try {
                 final TimeByPoi timeByPoi = poiSummarization.get(key);
-                StoppedTimeByPointOfInterestFact stoppedTimeByPoiFact = new StoppedTimeByPointOfInterestFact();
+                TimeByPoiAndPlateFact stoppedTimeByPoiAndPlateFact = new TimeByPoiAndPlateFact();
                 final double totalSecondsStoppedInsidePoi = timeByPoi.getTotalSecondsStoppedInsidePoi().getSum();
                 final double totalSecondsInsidePoi = timeByPoi.getTotalSecondsInsidePoi().getSum();
-                stoppedTimeByPoiFact.setTotalSecondsStoppedInsidePoi(totalSecondsStoppedInsidePoi);
-                stoppedTimeByPoiFact.setTotalSecondsInsidePoi(totalSecondsInsidePoi);
-                stoppedTimeByPoiFact.setPointOfInterest(timeByPoi.getPointOfInterest().getName());
-                stoppedTimeByPoiFact.setPlate(summarization.getPlate());
-                result.add(stoppedTimeByPoiFact);
+                stoppedTimeByPoiAndPlateFact.setTotalSecondsStoppedInsidePoi(totalSecondsStoppedInsidePoi);
+                stoppedTimeByPoiAndPlateFact.setTotalSecondsInsidePoi(totalSecondsInsidePoi);
+                stoppedTimeByPoiAndPlateFact.setPointOfInterest(timeByPoi.getPointOfInterest().getName());
+                stoppedTimeByPoiAndPlateFact.setPlate(summarization.getPlate());
+                result.add(stoppedTimeByPoiAndPlateFact);
             }
             catch (Exception ex){
                 System.out.println(ex);

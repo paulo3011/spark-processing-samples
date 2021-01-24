@@ -6,9 +6,9 @@ import lombok.Setter;
 import java.io.Serializable;
 
 /**
- * Total of seconds stopped by plate and point of interest.
+ * Total of seconds stopped and inside of point of interest by plate.
  */
-public class StoppedTimeByPointOfInterestFact implements Serializable {
+public class TimeByPoiAndPlateFact implements Serializable {
     /**
      * Plate who belongs the stopped time.
      */

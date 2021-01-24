@@ -15,19 +15,16 @@ public class TimeByPoi implements Serializable {
     /**
      * Point of interest who belongs the summarization.
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private PointOfInterest pointOfInterest;
     /**
      * Summarization property that holds the total of seconds stopped inside of poi.
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private SummaryStatistics totalSecondsStoppedInsidePoi = new SummaryStatistics();
     /**
      * Summarization property that holds the total of seconds inside of poi.
      */
-    @Getter
-    @Setter
+    @Getter @Setter
     private SummaryStatistics totalSecondsInsidePoi = new SummaryStatistics();
 }
