@@ -15,5 +15,5 @@ public interface IPositionProcessing {
      * Process all positions
      * @param positionList
      */
-    void ProcessAllPosition(final List<Position> positionList);
+    void ProcessAllPosition(final Iterable<Position> positionList);
 }

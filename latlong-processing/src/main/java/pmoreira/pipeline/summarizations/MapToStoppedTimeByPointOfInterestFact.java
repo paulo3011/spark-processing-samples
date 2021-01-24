@@ -3,7 +3,7 @@ package pmoreira.pipeline.summarizations;
 import org.apache.parquet.it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import org.apache.spark.api.java.function.FlatMapFunction;
 import pmoreira.domain.models.StoppedTimeByPointOfInterestFact;
-import pmoreira.domain.business.TimeByPlate;
+import pmoreira.domain.business.TimeByPlateProcessor;
 import pmoreira.domain.models.TimeByPoi;
 
 import java.io.Serializable;
@@ -12,14 +12,14 @@ import java.util.Iterator;
 import java.util.List;
 
 public class MapToStoppedTimeByPointOfInterestFact
-        implements FlatMapFunction<Iterator<TimeByPlate>, StoppedTimeByPointOfInterestFact>, Serializable
+        implements FlatMapFunction<Iterator<TimeByPlateProcessor>, StoppedTimeByPointOfInterestFact>, Serializable
 {
     @Override
-    public Iterator<StoppedTimeByPointOfInterestFact> call(Iterator<TimeByPlate> stoppedTimeByPlateIterator) {
+    public Iterator<StoppedTimeByPointOfInterestFact> call(Iterator<TimeByPlateProcessor> stoppedTimeByPlateIterator) {
         final List<StoppedTimeByPointOfInterestFact> result = new ObjectArrayList<>();
 
         while (stoppedTimeByPlateIterator.hasNext()) {
-            final TimeByPlate summarization = stoppedTimeByPlateIterator.next();
+            final TimeByPlateProcessor summarization = stoppedTimeByPlateIterator.next();
             List<StoppedTimeByPointOfInterestFact> converted = Convert(summarization);
             result.addAll(converted);
         }
@@ -27,7 +27,7 @@ public class MapToStoppedTimeByPointOfInterestFact
         return result.iterator();
     }
 
-    private List<StoppedTimeByPointOfInterestFact> Convert(TimeByPlate summarization) {
+    private List<StoppedTimeByPointOfInterestFact> Convert(TimeByPlateProcessor summarization) {
         List<StoppedTimeByPointOfInterestFact> result = new ObjectArrayList<>();
 
         final HashMap<String, TimeByPoi>  poiSummarization = summarization.getTimeByPoi();

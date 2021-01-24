@@ -36,4 +36,13 @@ public class PointOfInterest implements Serializable {
     @Getter
     @Setter
     private float radius;
+
+    @Override
+    public String toString() {
+        return name + ","
+                + longitude + ","
+                + latitude + ","
+                + radius
+                ;
+    }
 }

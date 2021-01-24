@@ -12,7 +12,7 @@ import pmoreira.domain.models.TimeByPoi;
 import java.util.HashMap;
 import java.util.List;
 
-public class TimeByPlate extends PositionProcessingBase implements IPositionProcessing {
+public class TimeByPlateProcessor extends PositionProcessingBase implements IPositionProcessing {
     /**
      * Vehicle plate
      */
@@ -87,7 +87,7 @@ public class TimeByPlate extends PositionProcessingBase implements IPositionProc
         this.timeByPoi.put(currentPoi.getName(), currentSummarization);
     }
 
-    public void ProcessAllPosition(final List<Position> positionList)
+    public void ProcessAllPosition(final Iterable<Position> positionList)
     {
         for(final Position currentPosition : positionList)
         {

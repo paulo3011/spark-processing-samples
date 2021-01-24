@@ -10,7 +10,8 @@ import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.storage.StorageLevel;
-import pmoreira.domain.business.TimeByPlate;
+import org.sparkproject.guava.collect.Lists;
+import pmoreira.domain.business.TimeByPlateProcessor;
 import pmoreira.domain.models.PointOfInterest;
 import pmoreira.domain.models.Position;
 import pmoreira.domain.models.StoppedTimeByPlateFact;
@@ -22,11 +23,14 @@ import pmoreira.pipeline.rddmaps.MapToPairPlatePosition;
 import pmoreira.pipeline.summarizations.MapToStoppedTimeByPlate;
 import pmoreira.pipeline.summarizations.MapToStoppedTimeByPlateFact;
 import pmoreira.pipeline.summarizations.MapToStoppedTimeByPointOfInterestFact;
+import scala.Tuple2;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class batch {
     public static void main(String[] args) throws IOException {
@@ -49,6 +53,7 @@ public class batch {
 
         String positions = "C:\\projetos\\paulo3011\\spark-processing-samples\\latlong-processing\\src\\Data\\posicoes.csv";
         String poiFile = "C:\\projetos\\paulo3011\\spark-processing-samples\\latlong-processing\\src\\Data\\base_pois_def.csv";
+        String debugDir = "C:\\tmp\\positions\\";
         JavaRDD<String> poiFileLines = sparkContext.textFile(poiFile);
         JavaRDD<String> positionFileLines = sparkContext.textFile(positions);
 
@@ -56,32 +61,37 @@ public class batch {
         final List<PointOfInterest> pointOfInterestList = poiRDD.collect();
         Broadcast<List<PointOfInterest>> broadcastPoiRDD = sparkContext.broadcast(pointOfInterestList);
 
+        //take each block (128mb) of the file and convert each line of csv to Position
         JavaRDD<Position> positionsRDD = positionFileLines.mapPartitions(new MapCsvToPosition(broadcastPoiRDD));
-        JavaPairRDD<String,Position> positionByPlatePairRDD = positionsRDD.mapPartitionsToPair(new MapToPairPlatePosition());
-        JavaPairRDD<String,List<Position>> positionListByPlateRDD = new MapToListPositionByPlate().groupPositionsByPlate(positionByPlatePairRDD);
+        writeTextToDisk(positionsRDD,debugDir + "positionRDD\\"); // ok
 
-        JavaRDD<TimeByPlate> stoppedTimeByPlateJavaRDD = positionListByPlateRDD.mapPartitions(new MapToStoppedTimeByPlate());
+        JavaPairRDD<String,Iterable<Position>> positionListByPlateRDD = positionsRDD.groupBy(position -> position.getPlate());
+        //List<Tuple2<String,Iterable<Position>>> keyPair = positionListByPlateRDD.collect();
+        //ArrayList<Position> p1 = Lists.newArrayList(keyPair.get(0)._2);
+        //ArrayList<Position> p2 = Lists.newArrayList(keyPair.get(1)._2); //ok
+
+        JavaRDD<TimeByPlateProcessor> stoppedTimeByPlateJavaRDD = positionListByPlateRDD.mapPartitions(new MapToStoppedTimeByPlate());
         stoppedTimeByPlateJavaRDD.persist(StorageLevel.MEMORY_AND_DISK());
+        writeToDisk(stoppedTimeByPlateJavaRDD,sparkSession);
 
-        WriteToDisk(stoppedTimeByPlateJavaRDD,sparkSession);
     }
 
-    public static void WriteToDisk(JavaRDD<TimeByPlate> stoppedTimeByPlateJavaRDD, SparkSession sparkSession) throws IOException {
-        WriteToDiskStoppedTimeByPointOfInterestFact(stoppedTimeByPlateJavaRDD, sparkSession);
-        WriteToDiskStoppedTimeByPlateFact(stoppedTimeByPlateJavaRDD, sparkSession);
+    public static void writeToDisk(JavaRDD<TimeByPlateProcessor> stoppedTimeByPlateJavaRDD, SparkSession sparkSession) throws IOException {
+        writeToDiskStoppedTimeByPointOfInterestFact(stoppedTimeByPlateJavaRDD, sparkSession);
+        writeToDiskStoppedTimeByPlateFact(stoppedTimeByPlateJavaRDD, sparkSession);
     }
 
-    public static void WriteToDiskStoppedTimeByPlateFact(JavaRDD<TimeByPlate> stoppedTimeByPlateJavaRDD, SparkSession sparkSession) throws IOException {
+    public static void writeToDiskStoppedTimeByPlateFact(JavaRDD<TimeByPlateProcessor> stoppedTimeByPlateJavaRDD, SparkSession sparkSession) throws IOException {
         JavaRDD<StoppedTimeByPlateFact> rdd = stoppedTimeByPlateJavaRDD.mapPartitions(new MapToStoppedTimeByPlateFact());
-        WriteCsvToDisk(rdd, StoppedTimeByPlateFact.class,sparkSession,"C:\\tmp\\positions\\StoppedTimeByPlateFact");
+        writeCsvToDisk(rdd, StoppedTimeByPlateFact.class,sparkSession,"C:\\tmp\\positions\\StoppedTimeByPlateFact");
     }
 
-    public static void WriteToDiskStoppedTimeByPointOfInterestFact(JavaRDD<TimeByPlate> stoppedTimeByPlateJavaRDD, SparkSession sparkSession) throws IOException {
+    public static void writeToDiskStoppedTimeByPointOfInterestFact(JavaRDD<TimeByPlateProcessor> stoppedTimeByPlateJavaRDD, SparkSession sparkSession) throws IOException {
         JavaRDD<StoppedTimeByPointOfInterestFact> rdd = stoppedTimeByPlateJavaRDD.mapPartitions(new MapToStoppedTimeByPointOfInterestFact());
-        WriteCsvToDisk(rdd, StoppedTimeByPointOfInterestFact.class,sparkSession,"C:\\tmp\\positions\\StoppedTimeByPointOfInterestFact");
+        writeCsvToDisk(rdd, StoppedTimeByPointOfInterestFact.class,sparkSession,"C:\\tmp\\positions\\StoppedTimeByPointOfInterestFact");
     }
 
-    public static void WriteCsvToDisk(final JavaRDD<?> rdd, final Class<?> beanClass, SparkSession sparkSession, String outputDirPath ) throws IOException {
+    public static void writeCsvToDisk(final JavaRDD<?> rdd, final Class<?> beanClass, SparkSession sparkSession, String outputDirPath ) throws IOException {
         final Dataset<Row> rowDataset = sparkSession.createDataFrame(rdd,beanClass);
 
         Path path = Paths.get(outputDirPath);
@@ -93,6 +103,12 @@ public class batch {
                 .write()
                 .option("header","true")
                 .csv(outputDirPath);
+    }
+
+    public static void writeTextToDisk(final JavaRDD<?> rdd, String outputDirPath) throws IOException {
+        Path path = Paths.get(outputDirPath);
+        FileUtils.deleteDirectory(path.toFile());
+        rdd.repartition(1).saveAsTextFile(outputDirPath);
     }
 
 

@@ -16,8 +16,8 @@ public class MapToListPositionByPlate implements Serializable {
     public JavaPairRDD<String,List<Position>> groupPositionsByPlate(JavaPairRDD<String,Position> positionJavaPairRDD){
         return positionJavaPairRDD.combineByKey(
                 this::createNewPositionListForEachPlate,
-                this::mergePositionsFromSamePlate,
-                this::mergeListPositionFromSamePlate
+                this::addPositionsToSamePlateList,
+                this::combineListPositionFromSamePlate
         );
     }
 
@@ -39,7 +39,7 @@ public class MapToListPositionByPlate implements Serializable {
      * @param positionSamePlate
      * @return
      */
-    private List<Position> mergePositionsFromSamePlate(final List<Position> positionsByPlate, final Position positionSamePlate)
+    private List<Position> addPositionsToSamePlateList(final List<Position> positionsByPlate, final Position positionSamePlate)
     {
         positionsByPlate.add(positionSamePlate);
         return positionsByPlate;
@@ -51,7 +51,7 @@ public class MapToListPositionByPlate implements Serializable {
      * @param positionsByPlate2
      * @return
      */
-    private List<Position> mergeListPositionFromSamePlate(final List<Position> positionsByPlate1, final List<Position> positionsByPlate2)
+    private List<Position> combineListPositionFromSamePlate(final List<Position> positionsByPlate1, final List<Position> positionsByPlate2)
     {
         if(positionsByPlate2 != null)
             positionsByPlate1.addAll(positionsByPlate1);

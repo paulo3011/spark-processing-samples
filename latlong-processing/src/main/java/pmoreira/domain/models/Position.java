@@ -52,6 +52,20 @@ public class Position
     @Getter @Setter
     private PointOfInterest nearestPointOfInterest=null;
 
+    @Override
+    public String toString() {
+        String poiDescription = (nearestPointOfInterest != null) ? nearestPointOfInterest.toString() : "-";
+        return plate + ","
+                + positionDate.toString() + ","
+                + speed + ","
+                + longitude + ","
+                + latitude + ","
+                + ignition + ","
+                + isStopped() + ","
+                + poiDescription
+                ;
+    }
+
     /**
      * Return true if vehicle is stopped or false otherwise
      * @return
