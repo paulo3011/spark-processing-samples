@@ -33,6 +33,24 @@ public class PointOfInterest implements Serializable {
     @Getter @Setter
     private float radius;
 
+    public PointOfInterest(){
+
+    }
+
+    /**
+     *
+     * @param name Name of poi
+     * @param latitude The center latitude of point of interest
+     * @param longitude The center longitude of point of interest
+     * @param radius The radius in meter of point of reference
+     */
+    public PointOfInterest(String name, double latitude, double longitude, float radius){
+        this.name = name;
+        this.latitude = (float)latitude;
+        this.longitude = (float)longitude;
+        this.radius = radius;
+    }
+
     @Override
     public String toString() {
         return name + ","

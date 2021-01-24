@@ -1,6 +1,7 @@
 package pmoreira.domain.business;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import org.apache.commons.math3.stat.descriptive.SummaryStatistics;
 import pmoreira.domain.contracts.IPositionProcessing;
@@ -37,6 +38,10 @@ public class TimeByPlateProcessor extends PositionProcessingBase implements IPos
         return plate + ',' + totalStoppedTime.getSum();
     }
 
+    /**
+     * Process next position from one vehicle
+     * @param currentPosition Current position in the processing
+     */
     public void processNextPosition(final Position currentPosition)
     {
         if(this.previousPosition == null)
@@ -45,6 +50,10 @@ public class TimeByPlateProcessor extends PositionProcessingBase implements IPos
         this.processPointOfInterest(currentPosition);
     }
 
+    /**
+     * Process stopped time inside poi
+     * @param currentPosition position to process
+     */
      public void processStoppedTimeInsidePoi(Position currentPosition){
         if(!currentPosition.isStopped())
             return;
@@ -86,7 +95,11 @@ public class TimeByPlateProcessor extends PositionProcessingBase implements IPos
         this.timeByPoi.put(currentPoi.getName(), currentSummarization);
     }
 
-    public void processAllPosition(final Iterable<Position> positionList)
+    /**
+     * Process one list of position from one vehicle to calculate times variables.
+     * @param positionList List of position
+     */
+    public void processAllPosition(@NonNull final Iterable<Position> positionList)
     {
         for(final Position currentPosition : positionList)
         {

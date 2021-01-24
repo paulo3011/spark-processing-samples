@@ -5,14 +5,12 @@ import com.grum.geocalc.Coordinate;
 import com.grum.geocalc.EarthCalc;
 import com.grum.geocalc.Point;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
 public class Position
         implements Serializable
 {
@@ -31,7 +29,7 @@ public class Position
      * Set or get the vehicle speed at the position
      */
     @Getter @Setter
-    private Integer speed;
+    private int speed;
 
     @Getter @Setter
     private float latitude;
@@ -52,6 +50,31 @@ public class Position
     @Getter @Setter
     private PointOfInterest nearestPointOfInterest=null;
 
+    public Position(){
+
+    }
+
+
+    public Position(String plate, LocalDateTime positionDate, double latitude, double longitude, int speed, boolean ignition){
+        this.plate = plate;
+        this.positionDate = positionDate;
+        this.latitude = (float)latitude;
+        this.longitude = (float)longitude;
+        this.speed = speed;
+        this.ignition = ignition;
+    }
+
+    public Position(String plate, LocalDateTime positionDate, double latitude, double longitude, int speed, boolean ignition, PointOfInterest pointOfInterest){
+        this.plate = plate;
+        this.positionDate = positionDate;
+        this.latitude = (float)latitude;
+        this.longitude = (float)longitude;
+        this.speed = speed;
+        this.ignition = ignition;
+        this.nearestPointOfInterest = pointOfInterest;
+    }
+
+
     @Override
     public String toString() {
         String poiDescription = (nearestPointOfInterest != null) ? nearestPointOfInterest.toString() : "-";
@@ -67,20 +90,18 @@ public class Position
     }
 
     /**
-     * Return true if vehicle is stopped or false otherwise
-     * @return
+     * Check if vehicle is stopped or not
+     * @return Return true if stopped or false otherwise
      */
     public boolean isStopped()
     {
-        if(speed < 5 && ignition == false)
-            return true;
-        return false;
+        return speed < 5 && !ignition;
     }
 
     /**
      * Return the difference between next position and this position.
-     * @param nextPosition
-     * @return
+     * @param nextPosition Next position
+     * @return Return the amount of seconds from this position to nextPosition
      */
     public long getSecondsFromNext(final Position nextPosition)
     {
@@ -90,13 +111,13 @@ public class Position
 
     /**
      * Logic to order position list by plate and position date.
-     * @param position1
-     * @param position2
-     * @return
+     * @param position1 Position 1
+     * @param position2 Position 2
+     * @return Return the order int
      */
     public static int orderByPositionDate(final Position position1, final Position position2)
     {
-        int lastComparison = 0;
+        int lastComparison;
         lastComparison = position1.getPlate().compareTo(position2.getPlate());
 
         if(lastComparison == 0){
@@ -107,10 +128,9 @@ public class Position
     }
 
     /**
-     * Check if this position is inside of point of interest and return true if yes
-     * and false otherwise
-     * @param pointOfInterest
-     * @return
+     * Check if this position is inside of point of interest
+     * @param pointOfInterest Poi
+     * @return Return true if is inside and false otherwise
      */
     public boolean isInsidePointOfInterest(PointOfInterest pointOfInterest) {
         Coordinate lat = Coordinate.fromDegrees(this.getLatitude());
