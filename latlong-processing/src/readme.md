@@ -25,7 +25,7 @@ Execute a classe BatchPositionProcessor via debug.
 ## Via shell
 
 ```shell script
-java -jar latlong-processing-1.0-SNAPSHOT.jar -positions C:\tmp\positions\posicoes.csv -poi C:\tmp\positions\base_pois_def.csv -output C:\tmp\positions\output
+spark-submit latlong-processing-1.0.jar --class pmoreira.application.batchprocessing.BatchPositionProcessor -positions C:\tmp\positions\posicoes.csv -poi C:\tmp\positions\base_pois_def.csv -output C:\tmp\positions\output
 ```
 
 # Referências

@@ -3,7 +3,7 @@ package pmoreira.application.batchprocessing.models;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+
 
 /**
  * Batch processing args

@@ -1,13 +1,11 @@
 plugins {
     //id 'io.franzbecker.gradle-lombok' version '1.11'
-    //id 'java-library'
-    id 'java'
+    id 'java-library'
+    //id 'java'
 }
 
 group 'pmoreira'
-version '1.0-SNAPSHOT'
-
-sourceCompatibility = 1.8
+version '1.0'
 
 repositories {
     mavenCentral()
@@ -24,8 +22,7 @@ dependencies {
     implementation group: 'com.github.grumlimited', name: 'geocalc', version: '0.6'
 
     // https://mvnrepository.com/artifact/com.beust/jcommander
-    implementation group: 'com.beust', name: 'jcommander', version: '1.78'
-
+    implementation group: 'com.beust', name: 'jcommander', version: '[1.78,)'
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: '[1.18.,)'
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '[1.18.,)'
